@@ -30,6 +30,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="Description"
             android:inputType="text" />
 
         <Space
@@ -43,6 +44,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="price"
             android:inputType="numberDecimal" />
 
         <Space
@@ -56,6 +58,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="category"
             android:inputType="textPersonName" />
 
         <Space

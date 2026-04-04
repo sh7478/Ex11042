@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ex11042">
         <activity
+            android:name=".SortingActivity"
+            android:exported="false" />
+        <activity
             android:name=".DisplayActivity"
             android:exported="false" />
         <activity
