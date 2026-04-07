@@ -25,7 +25,7 @@
             android:layout_weight="1" />
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/eTDesc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
             android:layout_weight="1" />
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/eTPrice"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -52,14 +52,11 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <EditText
-            android:id="@+id/editTextTextPostalAddress"
+        <Spinner
+            android:id="@+id/catSpin"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="category"
-            android:inputType="textPersonName" />
+            android:layout_weight="1" />
 
         <Space
             android:layout_width="match_parent"
@@ -67,7 +64,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/datePick"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -83,7 +80,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Button" />
+            android:onClick="addToDb"
+            android:text="confirm" />
 
         <Space
             android:layout_width="match_parent"

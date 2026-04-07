@@ -28,7 +28,7 @@ public class HelperDB extends SQLiteOpenHelper {
         strCreate += " "+DESCRIPTION+" TEXT,";
         strCreate += " "+AMOUNT+" REAL,";
         strCreate += " "+CATEGORY+" TEXT,";
-        strCreate += " "+EXPENSE_TIME+" DATE";
+        strCreate += " "+EXPENSE_TIME+" TEXT";
         strCreate += ")";
         db.execSQL(strCreate);
     }
