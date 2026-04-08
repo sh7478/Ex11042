@@ -3,9 +3,12 @@ package com.example.ex11042;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,6 +70,38 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dpd.show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.menuInpu)
+        {
+            eTDesc.setText("");
+            eTPrice.setText("");
+            catSpin.setSelection(0);
+            date = "";
+            category = "";
+        }else if(id == R.id.menuExpens) {
+            Intent it = new Intent(this, DisplayActivity.class);
+            startActivity(it);
+        }else if(id == R.id.menuSort) {
+            Intent it = new Intent(this, SortingActivity.class);
+            startActivity(it);
+        }else if(id == R.id.menuFilter) {
+            Intent it = new Intent(this, FilteringActivity.class);
+            startActivity(it);
+        }else if(id == R.id.menuCred) {
+            Intent it = new Intent(this, CreditsActivity.class);
+            startActivity(it);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

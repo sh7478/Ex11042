@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_weight="80"
         android:orientation="vertical">
 
         <Space
@@ -34,66 +34,6 @@
             android:layout_height="0dp"
             android:layout_weight="10" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="40"
-        android:orientation="vertical">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
-
-        <EditText
-            android:id="@+id/eTDescSearch"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="16"
-            android:ems="10"
-            android:hint="description search"
-            android:inputType="text" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="16" />
-
-        <TextView
-            android:id="@+id/expenseByDesc"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="16"
-            android:text="there isn't description to search" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5" />
-
-        <Spinner
-            android:id="@+id/monthSpin"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5" />
-
-        <TextView
-            android:id="@+id/sumOfMonth"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="16" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
     </LinearLayout>
 
     <Space
