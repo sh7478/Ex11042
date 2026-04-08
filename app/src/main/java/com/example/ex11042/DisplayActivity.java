@@ -120,6 +120,27 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
     @Override
     protected void onResume() {
         super.onResume();
+        tbl.clear();
+        db = hlp.getWritableDatabase();
+        crsr = db.query(Expenses.TABLE_NAME, null, null, null, null, null, null);
+        int col1 = crsr.getColumnIndex(Expenses.KEY_ID);
+        int col2 = crsr.getColumnIndex(Expenses.DESCRIPTION);
+        int col3 = crsr.getColumnIndex(Expenses.AMOUNT);
+        int col4 = crsr.getColumnIndex(Expenses.CATEGORY);
+        int col5 = crsr.getColumnIndex(Expenses.EXPENSE_TIME);
+        crsr.moveToFirst();
+        while (!crsr.isAfterLast()){
+            int key = crsr.getInt(col1);
+            String desc = crsr.getString(col2);
+            double amount = crsr.getDouble(col3);
+            String category = crsr.getString(col4);
+            String time = crsr.getString(col5);
+            String tmp = "" + key + ", " + desc + ", " + amount + ", " + category + ", " + time;
+            tbl.add(tmp);
+            crsr.moveToNext();
+        }
+        crsr.close();
+        db.close();
         adp.notifyDataSetChanged();
     }
 }
