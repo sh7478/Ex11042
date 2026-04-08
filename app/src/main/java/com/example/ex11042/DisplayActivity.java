@@ -1,11 +1,15 @@
 package com.example.ex11042;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
-public class DisplayActivity extends AppCompatActivity {
+public class DisplayActivity extends AppCompatActivity implements View.OnCreateContextMenuListener {
 
     SQLiteDatabase db;
     HelperDB hlp;
@@ -31,6 +35,8 @@ public class DisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
         lv = findViewById(R.id.lvDisplay);
+        registerForContextMenu(lv);
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         hlp = new HelperDB(this);
         db = hlp.getWritableDatabase();
         crsr = db.query(Expenses.TABLE_NAME, null, null, null, null, null, null);
@@ -81,5 +87,39 @@ public class DisplayActivity extends AppCompatActivity {
             startActivity(it);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add("delete expense");
+        menu.add("update expense");
+    }
+
+    public boolean onContextItemSelected(MenuItem item){
+        String func = item.getTitle().toString();
+        if(func.equals("delete expense"))
+        {
+            db = hlp.getWritableDatabase();
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            int position = info.position;
+            db.delete(Expenses.TABLE_NAME, Expenses.KEY_ID + "=?" , new String[]{Integer.toString(position + 1)});
+            db.close();
+            tbl.remove(position);
+            adp.notifyDataSetChanged();
+        }else if(func.equals("update expense"))
+        {
+            Intent it = new Intent(this, UpdateExpenseActivity.class);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            int position = info.position;
+            it.putExtra("id", position + 1);
+            startActivity(it);
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adp.notifyDataSetChanged();
     }
 }

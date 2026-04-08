@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ex11042</string>
 
-    <string-array name = "categories">
+    <string-array name="categories">
         <item>Choose a category</item>
         <item>Housing</item>
         <item>Groceries</item>
