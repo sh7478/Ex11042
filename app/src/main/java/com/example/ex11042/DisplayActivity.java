@@ -52,7 +52,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
             double amount = crsr.getDouble(col3);
             String category = crsr.getString(col4);
             String time = crsr.getString(col5);
-            String tmp = "" + key + ", " + desc + ", " + amount + ", " + category + ", " + time;
+            String tmp = "" + desc + ", " + amount + ", " + category + ", " + time;
             tbl.add(tmp);
             crsr.moveToNext();
         }
@@ -135,7 +135,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
             double amount = crsr.getDouble(col3);
             String category = crsr.getString(col4);
             String time = crsr.getString(col5);
-            String tmp = "" + key + ", " + desc + ", " + amount + ", " + category + ", " + time;
+            String tmp = "" + desc + ", " + amount + ", " + category + ", " + time;
             tbl.add(tmp);
             crsr.moveToNext();
         }

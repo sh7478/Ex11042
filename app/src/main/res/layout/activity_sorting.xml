@@ -25,19 +25,15 @@
             android:layout_weight="10" />
 
         <ListView
+            android:id="@+id/lvSort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="40" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5" />
+            android:layout_weight="70" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="35"
+            android:layout_weight="30"
             android:orientation="vertical">
 
             <Space
@@ -46,10 +42,11 @@
                 android:layout_weight="1" />
 
             <Switch
-                android:id="@+id/switch1"
+                android:id="@+id/dateOrPrice"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:onClick="changeDatePrice"
                 android:text="Date/Price" />
 
             <Space
@@ -58,10 +55,11 @@
                 android:layout_weight="1" />
 
             <Switch
-                android:id="@+id/switch2"
+                android:id="@+id/descOrAsce"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:onClick="ChangeDescAsc"
                 android:text="Desc/Asce" />
 
             <Space
