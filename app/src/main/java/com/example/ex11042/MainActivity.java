@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String [] categories;
     EditText eTDesc, eTPrice;
     AlertDialog.Builder adb;
-    String category;
+    String category = "";
     Button datePick;
-    String date;
+    String date = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void addToDb(View view) {
-        if(eTDesc.getText().toString().isEmpty() || eTPrice.getText().toString().isEmpty()) {
+        if(eTDesc.getText().toString().isEmpty() || eTPrice.getText().toString().isEmpty() || date.isEmpty() || category.isEmpty()) {
             adb = new AlertDialog.Builder(this);
             adb.setTitle("Error");
             adb.setMessage("Please fill all the fields before confirming");
