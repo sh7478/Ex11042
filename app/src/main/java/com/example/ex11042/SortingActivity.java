@@ -22,13 +22,13 @@ import java.util.ArrayList;
 
 public class SortingActivity extends AppCompatActivity {
 
-    String [] columns;
-    String selection;
-    String [] selectionArgs;
-    String groupBy;
-    String having;
-    String orderBy;
-    String limit;
+    String [] columns = null;
+    String selection = null;
+    String [] selectionArgs = null;
+    String groupBy = null;
+    String having = null;
+    String orderBy = null;
+    String limit = null;
     SQLiteDatabase db;
     HelperDB hlp;
     Cursor crsr;
