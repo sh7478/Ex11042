@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -22,7 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
-public class DisplayActivity extends AppCompatActivity implements View.OnCreateContextMenuListener {
+public class DisplayActivity extends AppCompatActivity implements View.OnCreateContextMenuListener , AdapterView.OnItemSelectedListener{
 
     SQLiteDatabase db;
     HelperDB hlp;
@@ -30,11 +33,31 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
     ListView lv;
     ArrayList<String> tbl = new ArrayList<>();
     ArrayAdapter adp;
+    Spinner spinMonths;
+    EditText etDescSearch;
+    TextView tvSumByMonth, tvSearchResult;
+    String [] months;
+    String [] columns = null;
+    String selection = null;
+    String [] selectionArgs = null;
+    String groupBy = null;
+    String having = null;
+    String orderBy = null;
+    String limit = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
         lv = findViewById(R.id.lvDisplay);
+        spinMonths = findViewById(R.id.spinMonths);
+        etDescSearch = findViewById(R.id.etDescSearch);
+        tvSumByMonth = findViewById(R.id.tvSumByMonth);
+        tvSearchResult = findViewById(R.id.tvSearchResult);
+        months = getResources().getStringArray(R.array.months);
+        spinMonths.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adpSpin = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, months);
+        spinMonths.setAdapter(adpSpin);
         registerForContextMenu(lv);
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         hlp = new HelperDB(this);
@@ -99,10 +122,23 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
         String func = item.getTitle().toString();
         if(func.equals("delete expense"))
         {
+            int key = 0;
             db = hlp.getWritableDatabase();
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             int position = info.position;
-            db.delete(Expenses.TABLE_NAME, Expenses.KEY_ID + "=?" , new String[]{Integer.toString(position + 1)});
+            String text = tbl.get(info.position);
+            columns = new String[]{Expenses.KEY_ID};
+            selection = Expenses.DESCRIPTION + "=?";
+            text = text.substring(0, text.indexOf(","));
+            selectionArgs = new String[]{text};
+            crsr = db.query(Expenses.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+            int col1 = crsr.getColumnIndex(Expenses.KEY_ID);
+            crsr.moveToFirst();
+            if(!crsr.isAfterLast())
+            {
+                key = crsr.getInt(col1);
+            }
+            db.delete(Expenses.TABLE_NAME, Expenses.KEY_ID + "=?" , new String[]{Integer.toString(key)});
             db.close();
             tbl.remove(position);
             adp.notifyDataSetChanged();
@@ -142,5 +178,71 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
         crsr.close();
         db.close();
         adp.notifyDataSetChanged();
+    }
+
+    public void searchByDescription(View view) {
+        String description = etDescSearch.getText().toString();
+        db = hlp.getWritableDatabase();
+        columns = null;
+        selection = Expenses.DESCRIPTION + "=?";
+        selectionArgs = new String[] {description};
+        groupBy = null;
+        having = null;
+        orderBy = null;
+        limit = null;
+        crsr = db.query(Expenses.TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        int col1 = crsr.getColumnIndex(Expenses.KEY_ID);
+        int col2 = crsr.getColumnIndex(Expenses.DESCRIPTION);
+        int col3 = crsr.getColumnIndex(Expenses.AMOUNT);
+        int col4 = crsr.getColumnIndex(Expenses.CATEGORY);
+        int col5 = crsr.getColumnIndex(Expenses.EXPENSE_TIME);
+        crsr.moveToFirst();
+        if(!crsr.isAfterLast())
+        {
+            int key = crsr.getInt(col1);
+            String desc = crsr.getString(col2);
+            double amount = crsr.getDouble(col3);
+            String category = crsr.getString(col4);
+            String time = crsr.getString(col5);
+            String tmp = "" + desc + ", " + amount + ", " + category + ", " + time;
+            tvSearchResult.setText(tmp);
+        }
+        else
+        {
+            tvSearchResult.setText("You didn't searched for an expense");
+        }
+        crsr.close();
+        db.close();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        double sum = 0;
+        if(position != 0) {
+            db = hlp.getReadableDatabase();
+            String selection = Expenses.EXPENSE_TIME + " LIKE ?";
+            String[] selectionArgs = {"%/" + position + "/%"};
+            crsr = db.query(Expenses.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+            int col = crsr.getColumnIndex(Expenses.AMOUNT);
+            crsr.moveToFirst();
+            sum = 0;
+            while(!crsr.isAfterLast())
+            {
+                sum += crsr.getDouble(col);
+                crsr.moveToNext();
+            }
+            crsr.close();
+            db.close();
+            tvSumByMonth.setText("the sum of the expenses in the selected month is: " + sum);
+        }
+        else
+        {
+            tvSumByMonth.setText("You need to select a month in order to see the month's total expenses");
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        tvSumByMonth.setText("You need to select a month in order to see the month's total expenses");
     }
 }

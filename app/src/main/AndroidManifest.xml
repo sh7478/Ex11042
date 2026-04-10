@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
         <activity
+            android:name=".SearchAnalyticsActivity"
+            android:exported="false" />
+        <activity
             android:name=".UpdateExpenseActivity"
             android:exported="false" />
         <activity
