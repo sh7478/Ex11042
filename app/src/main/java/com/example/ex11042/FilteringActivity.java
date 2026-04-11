@@ -71,6 +71,7 @@ public class FilteringActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void readData() {
+        selection = null;
         if(!priceOrCategory.isChecked())
         {
             if(!etPriceMin.getText().toString().equals("") || !etPriceMax.getText().toString().equals(""))
@@ -188,7 +189,7 @@ public class FilteringActivity extends AppCompatActivity implements AdapterView.
         crsr.close();
         db.close();
         adp = new ArrayAdapter<String>(
-                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tbl);
+                this, android.R.layout.simple_spinner_dropdown_item, tbl);
         lvSort.setAdapter(adp);
     }
 

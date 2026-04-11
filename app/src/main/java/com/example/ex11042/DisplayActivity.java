@@ -23,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.sql.RowIdLifetime;
 import java.util.ArrayList;
 
 public class DisplayActivity extends AppCompatActivity implements View.OnCreateContextMenuListener , AdapterView.OnItemSelectedListener{
@@ -44,6 +45,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
     String having = null;
     String orderBy = null;
     String limit = null;
+    ArrayList<Integer> idList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
             String time = crsr.getString(col5);
             String tmp = "" + desc + ", " + amount + ", " + category + ", " + time;
             tbl.add(tmp);
+            idList.add(key);
             crsr.moveToNext();
         }
         crsr.close();
@@ -120,34 +123,22 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
 
     public boolean onContextItemSelected(MenuItem item){
         String func = item.getTitle().toString();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        int key = idList.get(position);
+        db = hlp.getWritableDatabase();
+
         if(func.equals("delete expense"))
         {
-            int key = 0;
-            db = hlp.getWritableDatabase();
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            int position = info.position;
-            String text = tbl.get(info.position);
-            columns = new String[]{Expenses.KEY_ID};
-            selection = Expenses.DESCRIPTION + "=?";
-            text = text.substring(0, text.indexOf(","));
-            selectionArgs = new String[]{text};
-            crsr = db.query(Expenses.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-            int col1 = crsr.getColumnIndex(Expenses.KEY_ID);
-            crsr.moveToFirst();
-            if(!crsr.isAfterLast())
-            {
-                key = crsr.getInt(col1);
-            }
             db.delete(Expenses.TABLE_NAME, Expenses.KEY_ID + "=?" , new String[]{Integer.toString(key)});
             db.close();
             tbl.remove(position);
+            idList.remove(position);
             adp.notifyDataSetChanged();
         }else if(func.equals("update expense"))
         {
             Intent it = new Intent(this, UpdateExpenseActivity.class);
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            int position = info.position;
-            it.putExtra("id", position + 1);
+            it.putExtra("id", key);
             startActivity(it);
         }
         return super.onContextItemSelected(item);
@@ -157,6 +148,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
     protected void onResume() {
         super.onResume();
         tbl.clear();
+        idList.clear();
         db = hlp.getWritableDatabase();
         crsr = db.query(Expenses.TABLE_NAME, null, null, null, null, null, null);
         int col1 = crsr.getColumnIndex(Expenses.KEY_ID);
@@ -173,6 +165,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnCreateC
             String time = crsr.getString(col5);
             String tmp = "" + desc + ", " + amount + ", " + category + ", " + time;
             tbl.add(tmp);
+            idList.add(key);
             crsr.moveToNext();
         }
         crsr.close();

@@ -72,7 +72,7 @@ public class SortingActivity extends AppCompatActivity {
         crsr.close();
         db.close();
         adp = new ArrayAdapter<String>(
-                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tbl);
+                this, android.R.layout.simple_spinner_dropdown_item, tbl);
         lvSort.setAdapter(adp);
     }
 

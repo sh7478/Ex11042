@@ -2,6 +2,7 @@ package com.example.ex11042;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -37,6 +39,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements AdapterV
     String groupBy = null;
     String having = null;
     String orderBy = null;
+    AlertDialog.Builder adb;
     String limit = null;
     Cursor crsr;
     @Override
@@ -116,13 +119,29 @@ public class UpdateExpenseActivity extends AppCompatActivity implements AdapterV
     }
 
     public void update(View view) {
-        ContentValues cv = new ContentValues();
-        cv.put(Expenses.DESCRIPTION , eTDescUpd.getText().toString());
-        cv.put(Expenses.AMOUNT, eTPriceUpd.getText().toString());
-        cv.put(Expenses.CATEGORY, category);
-        cv.put(Expenses.EXPENSE_TIME, date);
-        db = hlp.getWritableDatabase();
-        db.update(Expenses.TABLE_NAME, cv,Expenses.KEY_ID + "=?" , new String[]{id + ""});
+        if(eTDescUpd.getText().toString().isEmpty() || eTPriceUpd.getText().toString().isEmpty() || date.isEmpty())
+        {
+            adb = new AlertDialog.Builder(this);
+            adb.setTitle("Error");
+            adb.setMessage("Please fill all the fields before confirming");
+            adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            AlertDialog ad = adb.create();
+            ad.show();
+        }
+        else {
+            ContentValues cv = new ContentValues();
+            cv.put(Expenses.DESCRIPTION, eTDescUpd.getText().toString());
+            cv.put(Expenses.AMOUNT, eTPriceUpd.getText().toString());
+            cv.put(Expenses.CATEGORY, category);
+            cv.put(Expenses.EXPENSE_TIME, date);
+            db = hlp.getWritableDatabase();
+            db.update(Expenses.TABLE_NAME, cv, Expenses.KEY_ID + "=?", new String[]{id + ""});
+        }
         finish();
     }
 }
